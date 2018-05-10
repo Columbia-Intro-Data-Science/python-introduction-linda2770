@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Music Recommender</title>
+    <link href="../../dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="jquery.min.js"></script>
+    <script src="../../dist/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-offset-4 col-sm-4 text-center">
+                <br>
+                <br>
+                <h3>Find similar bands</h3>
+                <select id="bands" class="form-control"></select>
+                <br>
+                <button id="btn" class="btn btn-default btn-block">Get similar</button>
+                <br>
+                <div class="panel panel-default">
+                    <div class="panel-heading">Bands like this one</div>
+                    <ul id='bandList' class="list-group">
+                        <li class="list-group-item">none</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+    var $bands = $('#bands')
+    $.get('/api/v1.0/band/', function(data) {
+        console.log(data)
+        for (var i = 0; i < data.bands.length; i++) {
+            $bands.append($('<option>' + data.bands[i] + '</option>'))
+        }
+    })
+
+    $bandList = $('#bandList')
+    $('#btn').click(function(e) {
+        $.get('/api/v1.0/band/' + $bands.val(), function(data) {
+            $bandList.html('')
+            for (var i = 0; i < data.similar.length; i++) {
+                $bandList.append($('<li class="list-group-item">' + data.similar[i] + '</li>'))
+            }
+        })
+    })
+    </script>
+</body>
+
+</html>
